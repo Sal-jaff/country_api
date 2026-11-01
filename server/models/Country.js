@@ -53,12 +53,29 @@ class Country {
 
 
     }
+
+    async update(data) {
+        const name = data.name || this.name
+        const capital = data.capital || this.capital
+        const population = data.population || this.population 
+        const languages = data.languages || this.languages 
+        const fun_fact = data.fun_fact || this.fun_fact  
+        const map_image_url= data.map_image_url || this.map_image_url
+
+
+        const response = await db.query('UPDATE country SET name = $1,capital = $2, population = $3, languages = $4, fun_fact = $5, map_image_url = $6 WHERE country_id =$7 RETURNING *;',
+            [name,capital,population,languages,fun_fact,map_image_url,this.country_id]
+        )
+
+        return new Country(response.rows[0])
+    }
     async destroy() {
         let response = await db.query('DELETE FROM country WHERE name = $1 RETURNING *;',
             [this.name]
         )
         return new Country(response.rows[0])
     }
+
 
 }
 

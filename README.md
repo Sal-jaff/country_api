@@ -69,7 +69,9 @@ All available API endpoints with their methods and descriptions.
 |--------|---------------------------|------------------------------|
 | GET    | /countries                | Retrieves all countries          |
 | GET    | /countries/:name            | Retrieves a single country      |
+| GET    | /countries/:countryName/cities/:cityName | Retrieves a city and its country details |
 | POST   | /countries                | Creates a new country           |
+|  PATCH     |        /countries/:name    |    Modifies country parameters                             |
 | DELETE | /countries/:name            | Deletes a country               |
 
 ## Get all countries
@@ -82,28 +84,133 @@ To retrieve all countries, you can use the following `GET` request:
 
 `curl - X GET http://localhost:<port>/countries`
 
+ ## Get one country
+
+### Example Request
+
+To retrieve a country, you can use the following `GET` request:
+
+`GET /countries/:name`
+
+`curl - X GET http://localhost:<port>/countries/:name`
+
 ### Example Response
 
-A successful response will return a JSON array of countries objects, similar to the following:
+A successful request returns the country object, for example:
+
 ```json
-   [
-        {
-          "id": 1,
-          "name": "country1",
-          "capital": "capital1",
-          "population": 1,
-          "languages": "language1",
-          "fun_fact": "fact1",
-          "map_image_url": "url1"
-        },
-        {
-          "id": 2,
-          "name": "country2",
-          "capital": "capital2",
-          "population": 2,
-          "languages": "language2",
-          "fun_fact": "fact2",
-          "map_image_url": "url2"
-        },
-    ]
+{
+  "country_id": 1,
+  "name": "Brazil",
+  "capital": "Brasília",
+  "population": 212559417,
+  "languages": "Portuguese",
+  "fun_fact": "Brazil is the fifth largest country in the world by both land area and population.",
+  "map_image_url": "https://example.com/brazil.png"
+}
 ```
+
+## Get one city in a country
+
+Use the country name and city name in the URL. The lookup is case-insensitive and returns the city fields with a nested `country` object.
+
+`GET /countries/:countryName/cities/:cityName`
+
+Example: `GET http://localhost:<port>/countries/Brazil/cities/S%C3%A3o%20Paulo`
+
+### Example Response
+
+```json
+{
+  "city_id": 1,
+  "city_name": "São Paulo",
+  "city_population": 11451999,
+  "latitude": "-23.550520",
+  "longitude": "-46.633308",
+  "country_id": 1,
+  "country": {
+    "country_id": 1,
+    "name": "Brazil",
+    "capital": "Brasília",
+    "population": 212559417,
+    "languages": "Portuguese",
+    "fun_fact": "Brazil is the fifth largest country in the world by both land area and population.",
+    "map_image_url": "https://example.com/brazil.png"
+  }
+}
+```
+## Create a new country
+
+### Example Request
+
+To create a new country, you can use the following `POST` request and give in a  JSON object:
+```json
+        {
+          "name": "new_country",
+          "capital": "new_capital",
+          "population": 1,
+          "languages": "new_language",
+          "fun_fact": "new_fact",
+          "map_image_url": "new_url"
+        }
+```
+`POST /countries`
+
+`curl - X POST http://localhost:<port>/countries`
+
+### Example Response
+A successful response will return a JSON object of the new country , similar to the following:
+```json
+        {
+          "name": "new_country",
+          "capital": "new_capital",
+          "population": 1,
+          "languages": "new_language",
+          "fun_fact": "new_fact",
+          "map_image_url": "new_url"
+        }
+```
+## Update a Country Parameters
+
+### Example Request
+
+To update a country, you can use the following `PATCH` request and give in a JSON object:
+```json
+        {
+          "name": "new_country",
+          "capital": "new_capital",
+          "population": 1,
+          "languages": "new_language",
+
+        }
+```
+`PATCH /countries/:name`
+
+`curl - X PATCH http://localhost:<port>/countries/:name`
+
+### Example Response
+A successful response will return a JSON object of the updated country , similar to the following:
+```json
+        {
+          "name": "new_country",
+          "capital": "new_capital",
+          "population": 1,
+          "languages": "new_language",
+          "fun_fact": "fact",
+          "map_image_url": "url"
+        }
+```
+Note how the fun facts and url remains unchanged
+
+## Delete a Country 
+
+### Example Request
+
+To delete a country, you can use the following `DELETE` request giving in the name of the country to be deleted in the URL:
+
+`DELETE /countries/:name`
+
+`curl - X DELETE http://localhost:<port>/countries/:name`
+
+### Example Response
+A successful response will return a status of `204 No Content`
