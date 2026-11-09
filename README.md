@@ -26,7 +26,7 @@ A Country API that allows you to add,remove and view countries.
         - Express
         - PG = Deals with connection to DBMS
         - cors
-        -dotenv
+        - dotenv
         - nodemon for development
 4. Set up your database
     - Create a database on Supabase, or other cloud-based database management system platform
@@ -69,7 +69,6 @@ All available API endpoints with their methods and descriptions.
 |--------|---------------------------|------------------------------|
 | GET    | /countries                | Retrieves all countries          |
 | GET    | /countries/:name            | Retrieves a single country      |
-| GET    | /countries/:countryName/cities/:cityName | Retrieves a city and its country details |
 | POST   | /countries                | Creates a new country           |
 |  PATCH     |        /countries/:name    |    Modifies country parameters                             |
 | DELETE | /countries/:name            | Deletes a country               |
@@ -110,35 +109,7 @@ A successful request returns the country object, for example:
 }
 ```
 
-## Get one city in a country
 
-Use the country name and city name in the URL. The lookup is case-insensitive and returns the city fields with a nested `country` object.
-
-`GET /countries/:countryName/cities/:cityName`
-
-Example: `GET http://localhost:<port>/countries/Brazil/cities/S%C3%A3o%20Paulo`
-
-### Example Response
-
-```json
-{
-  "city_id": 1,
-  "city_name": "São Paulo",
-  "city_population": 11451999,
-  "latitude": "-23.550520",
-  "longitude": "-46.633308",
-  "country_id": 1,
-  "country": {
-    "country_id": 1,
-    "name": "Brazil",
-    "capital": "Brasília",
-    "population": 212559417,
-    "languages": "Portuguese",
-    "fun_fact": "Brazil is the fifth largest country in the world by both land area and population.",
-    "map_image_url": "https://example.com/brazil.png"
-  }
-}
-```
 ## Create a new country
 
 ### Example Request
